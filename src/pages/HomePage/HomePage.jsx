@@ -1,4 +1,6 @@
 import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from '../../services/api';
+import { NavLink, Route, Routes } from "react-router-dom";
+ 
 
 
 
@@ -6,11 +8,13 @@ import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, 
 
 
 
-
-const HomePage = (movies) => {
-  console.log(movies);
-  
-  return <div>HomePage</div>
+const HomePage = ({ movies }) => {
+  return <>
+    <h1>Trending today</h1>
+    <ul>
+      {movies.map(movie => <li key={movie.id}> <NavLink to={`/movies/${movie.id}`}>{movie.title}</NavLink> </li>)}
+    </ul>
+  </>
 };
 
 export default HomePage;

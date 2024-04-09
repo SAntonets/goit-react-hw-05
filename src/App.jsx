@@ -4,9 +4,10 @@ import { NavLink, Route, Routes } from "react-router-dom";
 import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from './services/api';
 import Loader from "./components/Loader/Loader";
 function App() {
+
   const [movies, setMovies] = useState(null);
   const [movie, setMovie] = useState(null);
-  const [movieDetails, setMovieDetails] = useState(null);
+  
   const [movieCredits, setMovieCredits] = useState(null);
   const [movieReviews, setMovieReviews] = useState(null);
   const [query, setQuery] = useState('Thor');
@@ -44,18 +45,7 @@ const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
     searchMovies();
   }, [query]);
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const data = await fetchMovieDetails('10195');
-        setMovieDetails(data);
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-      }
-    };
-
-    fetchDetails();
-  }, []);
+ 
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -102,7 +92,7 @@ const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
           <Routes>
             <Route path="/" element={<HomePage movies={movies } />} />
             <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:movieId" element={<MovieDetailsPage />} />
+            <Route path="/movies/:movieId" element={<MovieDetailsPage movie={movie} setMovie={setMovie } />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
