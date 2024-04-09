@@ -1,9 +1,16 @@
-import React from 'react'
+import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from '../../services/api';
 
-function HomePage() {
-  return (
-    <div>HomePage</div>
-  )
-}
 
-export default HomePage
+
+
+
+
+
+
+const HomePage = (movies) => {
+  console.log(movies);
+  
+  return <div>HomePage</div>
+};
+
+export default HomePage;

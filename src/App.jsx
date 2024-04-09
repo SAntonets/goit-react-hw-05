@@ -1,7 +1,8 @@
-import { useEffect, useState, lazy, Suspense, Routes, Route, NavLink} from 'react'
+import { useEffect, useState, lazy, Suspense} from 'react'
+import { NavLink, Route, Routes } from "react-router-dom";
  
 import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from './services/api';
-
+import Loader from "./components/Loader/Loader";
 function App() {
   const [movies, setMovies] = useState(null);
   const [movie, setMovie] = useState(null);
@@ -10,11 +11,11 @@ function App() {
   const [movieReviews, setMovieReviews] = useState(null);
   const [query, setQuery] = useState('Thor');
 
-  const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
+const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const MovieDetailsPage = lazy(() => import("./pages/MovieDetailsPage/MovieDetailsPage"));
-
 const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
-const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
+
 
 
   useEffect(() => {
@@ -82,16 +83,16 @@ const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
     fetchReviews();
   }, []);
 
-  console.log(movie);
+  
 
   return (
    <div>
       <header>
-        <nav className={css.nav}>
-          <NavLink className={getNavLinkClassName} to="/">
+        <nav>
+          <NavLink to="/">
             HomePage
           </NavLink>
-          <NavLink className={getNavLinkClassName} to="/movies">
+          <NavLink to="/movies">
             MoviesPage
           </NavLink>
         </nav>
@@ -99,7 +100,7 @@ const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
       <main>
         <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomePage movies={movies } />} />
             <Route path="/movies" element={<MoviesPage />} />
             <Route path="/movies/:movieId" element={<MovieDetailsPage />} />
             <Route path="*" element={<NotFound />} />
