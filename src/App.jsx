@@ -25,16 +25,7 @@ const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
   return (
    <div>
-      <header>
-        <nav>
-          <NavLink className={getNavLinkClassName} to="/">
-            Home    | 
-          </NavLink>
-          <NavLink className={getNavLinkClassName} to="/movies">
-           |       Movies
-          </NavLink>
-        </nav>
-      </header>
+      
       <main>
         <Suspense fallback={<Loader />}>
           <Routes>
