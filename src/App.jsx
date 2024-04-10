@@ -1,102 +1,51 @@
-import { useEffect, useState, lazy, Suspense} from 'react'
+import {lazy, Suspense} from 'react'
 import { NavLink, Route, Routes } from "react-router-dom";
- 
-import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from './services/api';
+ import clsx from "clsx";
 import Loader from "./components/Loader/Loader";
+import css from "./App.module.css";
+
 function App() {
 
-  const [movies, setMovies] = useState(null);
-  const [movie, setMovie] = useState(null);
   
-  const [movieCredits, setMovieCredits] = useState(null);
-  const [movieReviews, setMovieReviews] = useState(null);
-  const [query, setQuery] = useState('Thor');
+  
+ 
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const MovieDetailsPage = lazy(() => import("./pages/MovieDetailsPage/MovieDetailsPage"));
 const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
 const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
-
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const data = await fetchPopularMovies();
-        setMovies(data);
-      } catch (error) {
-        console.error("Error fetching popular movies:", error);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
-  useEffect(() => {
-    const searchMovies = async () => {
-      try {
-        const data = await searchMovie(query);
-        setMovie(data);
-      } catch (error) {
-        console.error("Error searching movies:", error);
-      }
-    };
-
-    searchMovies();
-  }, [query]);
-
- 
-
-  useEffect(() => {
-    const fetchCredits = async () => {
-      try {
-        const data = await fetchMovieCredits('10195');
-        setMovieCredits(data);
-      } catch (error) {
-        console.error("Error fetching movie credits:", error);
-      }
-    };
-
-    fetchCredits();
-  }, []);
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const data = await fetchMovieReviews('10195');
-        setMovieReviews(data);
-      } catch (error) {
-        console.error("Error fetching movie reviews:", error);
-      }
-    };
-
-    fetchReviews();
-  }, []);
-
   
+
+  const getNavLinkClassName = ({ isActive }) =>
+  clsx(css.navLink, {
+    [css.active]: isActive,
+  });
+   
 
   return (
    <div>
       <header>
         <nav>
-          <NavLink to="/">
-            HomePage
+          <NavLink className={getNavLinkClassName} to="/">
+            Home    | 
           </NavLink>
-          <NavLink to="/movies">
-            MoviesPage
+          <NavLink className={getNavLinkClassName} to="/movies">
+           |       Movies
           </NavLink>
         </nav>
       </header>
       <main>
         <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<HomePage movies={movies } />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:movieId" element={<MovieDetailsPage movie={movie} setMovie={setMovie } />} />
+            <Route path="/movies/:movieId/*" element={<MovieDetailsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>
+      <footer>The data are taken from themoviedb.org <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="themoviedb.org logo" /></footer>
     </div>
   );
 }

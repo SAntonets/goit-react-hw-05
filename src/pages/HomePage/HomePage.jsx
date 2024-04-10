@@ -1,20 +1,42 @@
-import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from '../../services/api';
-import { NavLink, Route, Routes } from "react-router-dom";
- 
+import { fetchPopularMovies} from '../../services/api';
+import { useEffect, useState } from 'react';
+import Loader from '../../components/Loader/Loader';
+import clsx from "clsx";
+import MovieList from '../../components/MovieList/MovieList';
+import css from './HomePage.module.css'
 
 
 
 
 
+const HomePage = () => {
+  const [movies, setMovies] = useState(null);
 
 
-const HomePage = ({ movies }) => {
-  return <>
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const data = await fetchPopularMovies();
+        setMovies(data);
+      } catch (error) {
+        console.error("Error fetching popular movies:", error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  
+
+
+  if (!movies) {
+   
+    return <Loader />;
+  }
+  return <div className={css.HomePage}>
     <h1>Trending today</h1>
-    <ul>
-      {movies.map(movie => <li key={movie.id}> <NavLink to={`/movies/${movie.id}`}>{movie.title}</NavLink> </li>)}
-    </ul>
-  </>
+    <MovieList movies={movies} state={'/' } />
+  </div>
 };
 
 export default HomePage;

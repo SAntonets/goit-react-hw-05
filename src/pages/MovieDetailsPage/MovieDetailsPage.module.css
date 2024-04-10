@@ -1,0 +1,10 @@
+.MovieDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.linkList {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}

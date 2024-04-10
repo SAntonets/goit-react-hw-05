@@ -1,9 +1,28 @@
-import React from 'react'
-import { fetchPopularMovies, searchMovie, fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from '../../services/api';
-function NotFoundPage() {
-  return (
-    <div>NotFoundPage</div>
-  )
-}
+import { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import clsx from "clsx";
+const NotFound = () => {
+  const [timer, setTimer] = useState(0);
 
-export default NotFoundPage
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  if (timer === 5) {
+    return <Navigate to="/" replace />;
+  }
+
+  return (
+    <div>
+      <h1>Page you visited doesn&apos;t exist.</h1>
+      <h2>You will be redirected to Home in {5 - timer} seconds</h2>
+      <Link to="/">Go Home</Link>
+    </div>
+  );
+};
+
+export default NotFound;
