@@ -1,9 +1,9 @@
 import {lazy, Suspense} from 'react'
-import { NavLink, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
  import clsx from "clsx";
-import Loader from "./components/Loader/Loader";
+import Loader from "./components/Loader/Loader"; 
 import css from "./App.module.css";
-
+import Navigation from "./components/Navigation/Navigation";
 function App() {
 
   
@@ -17,15 +17,12 @@ const NotFound = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
   
 
-  const getNavLinkClassName = ({ isActive }) =>
-  clsx(css.navLink, {
-    [css.active]: isActive,
-  });
-   
 
   return (
    <div>
-      
+      <header>
+        <Navigation />
+      </header> 
       <main>
         <Suspense fallback={<Loader />}>
           <Routes>

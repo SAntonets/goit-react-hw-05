@@ -9,7 +9,7 @@ function Navigation() {
   });
 
   return (
-    <header>
+    
         <nav>
           <NavLink className={getNavLinkClassName} to="/">
             Home    | 
@@ -18,7 +18,7 @@ function Navigation() {
            |       Movies
           </NavLink>
         </nav>
-      </header>
+     
   )
 }
 
