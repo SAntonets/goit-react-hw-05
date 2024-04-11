@@ -2,34 +2,43 @@ import { searchMovie } from '../../services/api';
 import { useState, useEffect } from 'react';
 import Loader from '../../components/Loader/Loader';
 import MovieList from '../../components/MovieList/MovieList';
+import { useSearchParams, useLocation } from 'react-router-dom';
+
 
 function MoviesPage() {
     const [inputValue, setInputValue] = useState('');
     const [foundMovies, setFoundMovies] = useState([]);
     const [searchError, setSearchError] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get("query") ?? "";
+    const location = useLocation();
 
     useEffect(() => {
-        const query = localStorage.getItem('searchQuery');
         if (query) {
-            setInputValue(query);
-            handleSearch(query);
+            searchMovie(query).then((data) => {
+                setFoundMovies(data);
+            });
         }
-    }, []);
+    }, [query]);
+
+    const updateQueryString = (query) => {
+        const nextParams = query !== "" ? { query } : {};
+        setSearchParams(nextParams);
+    };
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
-    const handleSearch = async (query) => {
+    const handleSearch = async () => {
         try {
-            const data = await searchMovie(query);
+            const data = await searchMovie(inputValue);
             if (data.length === 0) {
                 setSearchError('No movies found with this title.');
             } else {
                 setSearchError('');
                 setFoundMovies(data);
             }
-            localStorage.setItem('searchQuery', query);
         } catch (error) {
             console.error("Error searching movies:", error);
         }
@@ -37,13 +46,16 @@ function MoviesPage() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        handleSearch(inputValue);
+        handleSearch();
+        updateQueryString(inputValue);
     };
 
-    if (!foundMovies) {
-        return <Loader />;
-    }
 
+
+    if (!foundMovies) {
+   
+    return <Loader />;
+  }
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -54,8 +66,8 @@ function MoviesPage() {
                 />
                 <button type="submit">Search</button>
             </form>
-        {searchError && <p>{searchError}</p>}
-        <MovieList movies={foundMovies} state={'/movies'} />
+            {searchError && <p>{searchError}</p>}
+            <MovieList movies={foundMovies} state={location.state} />
         </div>
     );
 }

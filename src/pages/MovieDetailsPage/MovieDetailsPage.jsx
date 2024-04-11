@@ -31,6 +31,9 @@ const MovieDetailsPage = () => {
     fetchDetails();
   }, []);
   
+console.log(location)  
+
+
 
   if (!movieDetails) {
    
