@@ -29,9 +29,8 @@ const MovieDetailsPage = () => {
     };
 
     fetchDetails();
-  }, []);
-  
-console.log(location)  
+  }, [ movieId ]);
+   
 
 
 
